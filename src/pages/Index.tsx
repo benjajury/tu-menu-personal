@@ -1,14 +1,67 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { WelcomeScreen } from "@/components/WelcomeScreen";
+import { PreferencesQuiz } from "@/components/PreferencesQuiz";
+import { MenuPage } from "@/components/MenuPage";
+
+type AppState = "welcome" | "preferences" | "menu";
 
 const Index = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
-  );
+  const [currentState, setCurrentState] = useState<AppState>("welcome");
+  const [preferences, setPreferences] = useState<Record<string, string>>({});
+  
+  // Restaurant configuration - can be customized
+  const restaurantConfig = {
+    name: "La Tavola",
+    type: "general" as const
+  };
+
+  const handlePreferencesComplete = (prefs: Record<string, string>) => {
+    setPreferences(prefs);
+    setCurrentState("menu");
+  };
+
+  const handleSkipPreferences = () => {
+    setCurrentState("menu");
+  };
+
+  const handleBackToWelcome = () => {
+    setCurrentState("welcome");
+  };
+
+  const handleContinueFromWelcome = () => {
+    setCurrentState("preferences");
+  };
+
+  switch (currentState) {
+    case "welcome":
+      return (
+        <WelcomeScreen 
+          onContinue={handleContinueFromWelcome}
+          restaurantName={restaurantConfig.name}
+        />
+      );
+    
+    case "preferences":
+      return (
+        <PreferencesQuiz
+          onComplete={handlePreferencesComplete}
+          onSkip={handleSkipPreferences}
+          onBack={handleBackToWelcome}
+          restaurantType={restaurantConfig.type}
+        />
+      );
+    
+    case "menu":
+      return (
+        <MenuPage 
+          preferences={preferences}
+          restaurantName={restaurantConfig.name}
+        />
+      );
+    
+    default:
+      return null;
+  }
 };
 
 export default Index;
