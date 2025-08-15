@@ -6,8 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MenuItemsManager } from "@/components/MenuItemsManager";
 import { CategoriesManager } from "@/components/CategoriesManager";
-import { RestaurantsManager } from "@/components/RestaurantsManager";
-import { LogOut, Store, Menu, Tags } from "lucide-react";
+import { LogOut, Menu, Tags } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface AdminDashboardProps {
@@ -54,7 +53,7 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
 
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="menu-items" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="menu-items" className="flex items-center gap-2">
               <Menu className="w-4 h-4" />
               Platos
@@ -62,10 +61,6 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
             <TabsTrigger value="categories" className="flex items-center gap-2">
               <Tags className="w-4 h-4" />
               Categorías
-            </TabsTrigger>
-            <TabsTrigger value="restaurants" className="flex items-center gap-2">
-              <Store className="w-4 h-4" />
-              Restaurantes
             </TabsTrigger>
           </TabsList>
 
@@ -98,19 +93,6 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
               </Card>
             </TabsContent>
 
-            <TabsContent value="restaurants">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Gestión de Restaurantes</CardTitle>
-                  <CardDescription>
-                    Configura la información del restaurante
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <RestaurantsManager />
-                </CardContent>
-              </Card>
-            </TabsContent>
           </div>
         </Tabs>
       </main>

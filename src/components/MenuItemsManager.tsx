@@ -40,7 +40,6 @@ interface Restaurant {
 export function MenuItemsManager() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
@@ -52,7 +51,6 @@ export function MenuItemsManager() {
     price: "",
     image_url: "",
     category_id: "",
-    restaurant_id: "",
     is_available: true,
     is_vegetarian: false,
     is_vegan: false,
@@ -66,19 +64,16 @@ export function MenuItemsManager() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [itemsRes, categoriesRes, restaurantsRes] = await Promise.all([
+      const [itemsRes, categoriesRes] = await Promise.all([
         supabase.from("menu_items").select("*").order("name"),
         supabase.from("categories").select("*").order("name"),
-        supabase.from("restaurants").select("*").order("name"),
       ]);
 
       if (itemsRes.error) throw itemsRes.error;
       if (categoriesRes.error) throw categoriesRes.error;
-      if (restaurantsRes.error) throw restaurantsRes.error;
 
       setMenuItems(itemsRes.data || []);
       setCategories(categoriesRes.data || []);
-      setRestaurants(restaurantsRes.data || []);
     } catch (error: any) {
       toast({
         title: "Error",
@@ -97,7 +92,6 @@ export function MenuItemsManager() {
       price: "",
       image_url: "",
       category_id: "",
-      restaurant_id: "",
       is_available: true,
       is_vegetarian: false,
       is_vegan: false,
@@ -151,7 +145,6 @@ export function MenuItemsManager() {
       price: item.price.toString(),
       image_url: item.image_url || "",
       category_id: item.category_id || "",
-      restaurant_id: item.restaurant_id || "",
       is_available: item.is_available,
       is_vegetarian: item.is_vegetarian,
       is_vegan: item.is_vegan,
@@ -182,10 +175,6 @@ export function MenuItemsManager() {
     return category?.name || "Sin categoría";
   };
 
-  const getRestaurantName = (restaurantId: string) => {
-    const restaurant = restaurants.find((r) => r.id === restaurantId);
-    return restaurant?.name || "Sin restaurante";
-  };
 
   return (
     <div className="space-y-6">
@@ -260,47 +249,25 @@ export function MenuItemsManager() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="restaurant_id">Restaurante</Label>
-                  <Select
-                    value={formData.restaurant_id}
-                    onValueChange={(value) =>
-                      setFormData({ ...formData, restaurant_id: value })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecciona restaurante" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {restaurants.map((restaurant) => (
-                        <SelectItem key={restaurant.id} value={restaurant.id}>
-                          {restaurant.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="category_id">Categoría</Label>
-                  <Select
-                    value={formData.category_id}
-                    onValueChange={(value) =>
-                      setFormData({ ...formData, category_id: value })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecciona categoría" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="category_id">Categoría</Label>
+                <Select
+                  value={formData.category_id}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, category_id: value })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecciona categoría" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -378,7 +345,6 @@ export function MenuItemsManager() {
                 <TableHead>Nombre</TableHead>
                 <TableHead>Precio</TableHead>
                 <TableHead>Categoría</TableHead>
-                <TableHead>Restaurante</TableHead>
                 <TableHead>Estado</TableHead>
                 <TableHead>Acciones</TableHead>
               </TableRow>
@@ -389,7 +355,6 @@ export function MenuItemsManager() {
                   <TableCell className="font-medium">{item.name}</TableCell>
                   <TableCell>${item.price}</TableCell>
                   <TableCell>{getCategoryName(item.category_id)}</TableCell>
-                  <TableCell>{getRestaurantName(item.restaurant_id)}</TableCell>
                   <TableCell>
                     <span
                       className={`px-2 py-1 rounded-full text-xs ${

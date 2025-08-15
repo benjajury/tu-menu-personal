@@ -24,7 +24,6 @@ interface Restaurant {
 
 export function CategoriesManager() {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
@@ -33,7 +32,6 @@ export function CategoriesManager() {
   const [formData, setFormData] = useState({
     name: "",
     icon: "",
-    restaurant_id: "",
   });
 
   useEffect(() => {
@@ -43,16 +41,13 @@ export function CategoriesManager() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [categoriesRes, restaurantsRes] = await Promise.all([
-        supabase.from("categories").select("*").order("name"),
-        supabase.from("restaurants").select("*").order("name"),
-      ]);
+      const { data, error } = await supabase
+        .from("categories")
+        .select("*")
+        .order("name");
 
-      if (categoriesRes.error) throw categoriesRes.error;
-      if (restaurantsRes.error) throw restaurantsRes.error;
-
-      setCategories(categoriesRes.data || []);
-      setRestaurants(restaurantsRes.data || []);
+      if (error) throw error;
+      setCategories(data || []);
     } catch (error: any) {
       toast({
         title: "Error",
@@ -68,7 +63,6 @@ export function CategoriesManager() {
     setFormData({
       name: "",
       icon: "",
-      restaurant_id: "",
     });
     setEditingCategory(null);
   };
@@ -110,7 +104,6 @@ export function CategoriesManager() {
     setFormData({
       name: category.name,
       icon: category.icon || "",
-      restaurant_id: category.restaurant_id || "",
     });
     setDialogOpen(true);
   };
@@ -132,10 +125,6 @@ export function CategoriesManager() {
     }
   };
 
-  const getRestaurantName = (restaurantId: string) => {
-    const restaurant = restaurants.find((r) => r.id === restaurantId);
-    return restaurant?.name || "Sin restaurante";
-  };
 
   return (
     <div className="space-y-6">
@@ -184,26 +173,6 @@ export function CategoriesManager() {
                 />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="restaurant_id">Restaurante</Label>
-                <Select
-                  value={formData.restaurant_id}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, restaurant_id: value })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona restaurante" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {restaurants.map((restaurant) => (
-                      <SelectItem key={restaurant.id} value={restaurant.id}>
-                        {restaurant.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
 
               <div className="flex justify-end space-x-2">
                 <Button
@@ -233,7 +202,6 @@ export function CategoriesManager() {
               <TableRow>
                 <TableHead>Nombre</TableHead>
                 <TableHead>Icono</TableHead>
-                <TableHead>Restaurante</TableHead>
                 <TableHead>Acciones</TableHead>
               </TableRow>
             </TableHeader>
@@ -242,7 +210,6 @@ export function CategoriesManager() {
                 <TableRow key={category.id}>
                   <TableCell className="font-medium">{category.name}</TableCell>
                   <TableCell>{category.icon}</TableCell>
-                  <TableCell>{getRestaurantName(category.restaurant_id)}</TableCell>
                   <TableCell>
                     <div className="flex space-x-2">
                       <Button
