@@ -7,10 +7,12 @@ interface MenuItem {
   name: string;
   description: string;
   price: number;
-  image?: string;
-  category: string;
-  isRecommended?: boolean;
-  dietary?: string[];
+  image_url?: string;
+  category_id: string;
+  is_available: boolean;
+  is_vegetarian: boolean;
+  is_vegan: boolean;
+  is_gluten_free: boolean;
 }
 
 interface FoodCardProps {
@@ -32,10 +34,10 @@ export function FoodCard({ item }: FoodCardProps) {
     <Card className="food-card p-0 overflow-hidden">
       <div className="flex">
         {/* Image */}
-        {item.image && (
+        {item.image_url && (
           <div className="w-24 h-24 flex-shrink-0">
             <img 
-              src={item.image} 
+              src={item.image_url} 
               alt={item.name}
               className="w-full h-full object-cover"
             />
@@ -50,9 +52,6 @@ export function FoodCard({ item }: FoodCardProps) {
                 <h3 className="font-semibold text-foreground text-sm leading-tight">
                   {item.name}
                 </h3>
-                {item.isRecommended && (
-                  <Star className="h-4 w-4 text-restaurant-gold fill-restaurant-gold flex-shrink-0" />
-                )}
               </div>
               
               <p className="text-muted-foreground text-xs leading-relaxed mb-2">
@@ -60,24 +59,25 @@ export function FoodCard({ item }: FoodCardProps) {
               </p>
               
               {/* Dietary badges */}
-              {item.dietary && item.dietary.length > 0 && (
-                <div className="flex flex-wrap gap-1 mb-2">
-                  {item.dietary.map((diet) => {
-                    const badge = getDietaryBadge(diet);
-                    if (!badge) return null;
-                    
-                    return (
-                      <div 
-                        key={diet}
-                        className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${badge.color}`}
-                      >
-                        {badge.icon && <badge.icon className="h-3 w-3" />}
-                        {badge.label}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+              <div className="flex flex-wrap gap-1 mb-2">
+                {item.is_vegetarian && (
+                  <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <Leaf className="h-3 w-3" />
+                    Vegetariano
+                  </div>
+                )}
+                {item.is_vegan && (
+                  <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <Leaf className="h-3 w-3" />
+                    Vegano
+                  </div>
+                )}
+                {item.is_gluten_free && (
+                  <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    Sin Gluten
+                  </div>
+                )}
+              </div>
             </div>
             
             {/* Price */}
