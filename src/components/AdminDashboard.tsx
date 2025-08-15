@@ -6,7 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MenuItemsManager } from "@/components/MenuItemsManager";
 import { CategoriesManager } from "@/components/CategoriesManager";
-import { LogOut, Menu, Tags } from "lucide-react";
+import { MenuPopulator } from "@/components/MenuPopulator";
+import { LogOut, Menu, Tags, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface AdminDashboardProps {
@@ -52,8 +53,12 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <Tabs defaultValue="menu-items" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+        <Tabs defaultValue="menu-populator" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="menu-populator" className="flex items-center gap-2">
+              <Upload className="w-4 h-4" />
+              Cargar Menú
+            </TabsTrigger>
             <TabsTrigger value="menu-items" className="flex items-center gap-2">
               <Menu className="w-4 h-4" />
               Platos
@@ -65,6 +70,14 @@ export function AdminDashboard({ user }: AdminDashboardProps) {
           </TabsList>
 
           <div className="mt-6">
+            <TabsContent value="menu-populator">
+              <Card>
+                <CardContent className="p-6">
+                  <MenuPopulator />
+                </CardContent>
+              </Card>
+            </TabsContent>
+
             <TabsContent value="menu-items">
               <Card>
                 <CardHeader>

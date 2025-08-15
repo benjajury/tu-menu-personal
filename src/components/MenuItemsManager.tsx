@@ -24,6 +24,12 @@ interface MenuItem {
   is_vegetarian: boolean;
   is_vegan: boolean;
   is_gluten_free: boolean;
+  spice_level?: string;
+  cooking_method?: string;
+  wine_pairing?: string;
+  origin?: string;
+  sophistication_level?: string;
+  allergens?: string[];
 }
 
 interface Category {
@@ -55,6 +61,12 @@ export function MenuItemsManager() {
     is_vegetarian: false,
     is_vegan: false,
     is_gluten_free: false,
+    spice_level: "",
+    cooking_method: "",
+    wine_pairing: "",
+    origin: "",
+    sophistication_level: "clásico",
+    allergens: [] as string[],
   });
 
   useEffect(() => {
@@ -96,6 +108,12 @@ export function MenuItemsManager() {
       is_vegetarian: false,
       is_vegan: false,
       is_gluten_free: false,
+      spice_level: "",
+      cooking_method: "",
+      wine_pairing: "",
+      origin: "",
+      sophistication_level: "clásico",
+      allergens: [],
     });
     setEditingItem(null);
   };
@@ -149,6 +167,12 @@ export function MenuItemsManager() {
       is_vegetarian: item.is_vegetarian,
       is_vegan: item.is_vegan,
       is_gluten_free: item.is_gluten_free,
+      spice_level: item.spice_level || "",
+      cooking_method: item.cooking_method || "",
+      wine_pairing: item.wine_pairing || "",
+      origin: item.origin || "",
+      sophistication_level: item.sophistication_level || "clásico",
+      allergens: item.allergens || [],
     });
     setDialogOpen(true);
   };
@@ -268,6 +292,82 @@ export function MenuItemsManager() {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="spice_level">Nivel de Picante</Label>
+                  <Select
+                    value={formData.spice_level}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, spice_level: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona nivel" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="suave">Suave</SelectItem>
+                      <SelectItem value="medio">Medio</SelectItem>
+                      <SelectItem value="fuerte">Fuerte</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="sophistication_level">Nivel de Sofisticación</Label>
+                  <Select
+                    value={formData.sophistication_level}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, sophistication_level: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Selecciona nivel" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="clásico">Clásico</SelectItem>
+                      <SelectItem value="premium">Premium</SelectItem>
+                      <SelectItem value="signature">Signature</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="cooking_method">Método de Cocción</Label>
+                  <Input
+                    id="cooking_method"
+                    value={formData.cooking_method}
+                    onChange={(e) =>
+                      setFormData({ ...formData, cooking_method: e.target.value })
+                    }
+                    placeholder="ej: Grillado, Frito, Al vapor"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="origin">Origen</Label>
+                  <Input
+                    id="origin"
+                    value={formData.origin}
+                    onChange={(e) =>
+                      setFormData({ ...formData, origin: e.target.value })
+                    }
+                    placeholder="ej: Costas chilenas"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="wine_pairing">Maridaje de Vino</Label>
+                <Input
+                  id="wine_pairing"
+                  value={formData.wine_pairing}
+                  onChange={(e) =>
+                    setFormData({ ...formData, wine_pairing: e.target.value })
+                  }
+                  placeholder="ej: Sauvignon Blanc Reserva"
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-4">

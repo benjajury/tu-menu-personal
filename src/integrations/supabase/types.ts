@@ -51,7 +51,9 @@ export type Database = {
       }
       menu_items: {
         Row: {
+          allergens: string[] | null
           category_id: string | null
+          cooking_method: string | null
           created_at: string | null
           description: string | null
           id: string
@@ -61,12 +63,18 @@ export type Database = {
           is_vegan: boolean | null
           is_vegetarian: boolean | null
           name: string
+          origin: string | null
           price: number
           restaurant_id: string | null
+          sophistication_level: string | null
+          spice_level: string | null
           updated_at: string | null
+          wine_pairing: string | null
         }
         Insert: {
+          allergens?: string[] | null
           category_id?: string | null
+          cooking_method?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
@@ -76,12 +84,18 @@ export type Database = {
           is_vegan?: boolean | null
           is_vegetarian?: boolean | null
           name: string
+          origin?: string | null
           price: number
           restaurant_id?: string | null
+          sophistication_level?: string | null
+          spice_level?: string | null
           updated_at?: string | null
+          wine_pairing?: string | null
         }
         Update: {
+          allergens?: string[] | null
           category_id?: string | null
+          cooking_method?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
@@ -91,9 +105,13 @@ export type Database = {
           is_vegan?: boolean | null
           is_vegetarian?: boolean | null
           name?: string
+          origin?: string | null
           price?: number
           restaurant_id?: string | null
+          sophistication_level?: string | null
+          spice_level?: string | null
           updated_at?: string | null
+          wine_pairing?: string | null
         }
         Relationships: [
           {
