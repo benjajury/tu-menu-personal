@@ -2,21 +2,22 @@ import { useState } from "react";
 import { WelcomeScreen } from "@/components/WelcomeScreen";
 import { PreferencesQuiz } from "@/components/PreferencesQuiz";
 import { MenuPage } from "@/components/MenuPage";
+import { usePreferences } from "@/hooks/usePreferences";
 
 type AppState = "welcome" | "preferences" | "menu";
 
 const Index = () => {
   const [currentState, setCurrentState] = useState<AppState>("welcome");
-  const [preferences, setPreferences] = useState<Record<string, string>>({});
+  const { preferences, savePreferences } = usePreferences();
   
   // Restaurant configuration - can be customized
   const restaurantConfig = {
-    name: "La Tavola",
+    name: "Yacht Club Chile",
     type: "general" as const
   };
 
-  const handlePreferencesComplete = (prefs: Record<string, string>) => {
-    setPreferences(prefs);
+  const handlePreferencesComplete = async (prefs: Record<string, string>) => {
+    await savePreferences(prefs);
     setCurrentState("menu");
   };
 
@@ -54,7 +55,7 @@ const Index = () => {
     case "menu":
       return (
         <MenuPage 
-          preferences={preferences}
+          preferences={preferences as Record<string, string>}
           restaurantName={restaurantConfig.name}
         />
       );

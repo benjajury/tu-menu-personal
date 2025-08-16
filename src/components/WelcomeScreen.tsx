@@ -21,10 +21,10 @@ export function WelcomeScreen({ onContinue, restaurantName }: WelcomeScreenProps
       {/* Navigation */}
       <nav className="nav-fixed px-4 py-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-warm rounded-xl">
+          <div className="p-2 bg-gradient-ocean rounded-xl">
             <ChefHat className="h-6 w-6 text-white" />
           </div>
-          <h1 className="text-xl font-bold text-gradient">{restaurantName}</h1>
+          <h1 className="text-xl font-bold text-gradient">Yacht Club Chile</h1>
         </div>
       </nav>
 
@@ -44,7 +44,7 @@ export function WelcomeScreen({ onContinue, restaurantName }: WelcomeScreenProps
           {/* Welcome Card */}
           <Card className="card-elegant text-center space-y-4">
             <div className="flex justify-center">
-              <div className="p-3 bg-gradient-warm rounded-full">
+              <div className="p-3 bg-gradient-ocean rounded-full">
                 <Sparkles className="h-8 w-8 text-white" />
               </div>
             </div>

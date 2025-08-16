@@ -82,8 +82,8 @@ export function FoodCard({ item }: FoodCardProps) {
             
             {/* Price */}
             <div className="text-right flex-shrink-0">
-              <div className="bg-gradient-warm text-white px-3 py-1 rounded-full">
-                <span className="font-bold text-sm">€{item.price.toFixed(2)}</span>
+              <div className="bg-gradient-ocean text-white px-3 py-1 rounded-full">
+                <span className="font-bold text-sm">${item.price.toFixed(0)}</span>
               </div>
             </div>
           </div>

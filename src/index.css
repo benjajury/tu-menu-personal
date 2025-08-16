@@ -8,56 +8,56 @@
 
 @layer base {
   :root {
-    /* Restaurant-themed color palette */
-    --background: 25 20% 98%;
-    --foreground: 20 14% 12%;
+    /* Yacht Club Chile - Ocean themed color palette */
+    --background: 0 0% 100%;
+    --foreground: 220 15% 25%;
 
     --card: 0 0% 100%;
-    --card-foreground: 20 14% 12%;
+    --card-foreground: 220 15% 25%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 20 14% 12%;
+    --popover-foreground: 220 15% 25%;
 
-    /* Warm restaurant primary colors */
-    --primary: 16 90% 58%;
-    --primary-foreground: 0 0% 98%;
-    --primary-glow: 16 100% 65%;
+    /* Ocean blue metallic primary colors */
+    --primary: 210 70% 45%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 215 65% 55%;
 
-    /* Elegant secondary */
-    --secondary: 20 30% 94%;
-    --secondary-foreground: 20 14% 12%;
+    /* Ocean secondary */
+    --secondary: 215 30% 94%;
+    --secondary-foreground: 220 15% 25%;
 
-    --muted: 20 15% 95%;
-    --muted-foreground: 20 10% 50%;
+    --muted: 215 15% 95%;
+    --muted-foreground: 220 10% 50%;
 
-    /* Warm accent colors */
-    --accent: 35 85% 60%;
-    --accent-foreground: 0 0% 98%;
+    /* Ocean accent colors */
+    --accent: 200 60% 65%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 20 15% 88%;
-    --input: 20 15% 95%;
-    --ring: 16 90% 58%;
+    --border: 215 15% 88%;
+    --input: 215 15% 95%;
+    --ring: 210 70% 45%;
 
     --radius: 0.75rem;
 
-    /* Restaurant-specific design tokens */
-    --restaurant-orange: 16 90% 58%;
-    --restaurant-red: 4 85% 55%;
-    --restaurant-gold: 45 95% 65%;
-    --restaurant-cream: 35 25% 96%;
+    /* Yacht Club Chile - Ocean design tokens */
+    --ocean-blue: 210 70% 45%;
+    --ocean-light: 200 60% 65%;
+    --ocean-metallic: 215 50% 35%;
+    --ocean-foam: 190 25% 96%;
     
-    /* Beautiful gradients */
+    /* Beautiful ocean gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-warm: linear-gradient(135deg, hsl(var(--restaurant-orange)), hsl(var(--restaurant-red)));
-    --gradient-gold: linear-gradient(135deg, hsl(var(--restaurant-gold)), hsl(var(--accent)));
-    --gradient-subtle: linear-gradient(180deg, hsl(var(--background)), hsl(var(--restaurant-cream)));
+    --gradient-ocean: linear-gradient(135deg, hsl(var(--ocean-blue)), hsl(var(--ocean-light)));
+    --gradient-metallic: linear-gradient(135deg, hsl(var(--ocean-metallic)), hsl(var(--accent)));
+    --gradient-subtle: linear-gradient(180deg, hsl(var(--background)), hsl(var(--ocean-foam)));
     
-    /* Elegant shadows */
+    /* Ocean shadows */
     --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.2);
-    --shadow-warm: 0 8px 25px -8px hsl(var(--restaurant-orange) / 0.3);
+    --shadow-ocean: 0 8px 25px -8px hsl(var(--ocean-blue) / 0.3);
     --shadow-card: 0 4px 15px -4px hsl(var(--foreground) / 0.1);
     
     /* Smooth transitions */
@@ -141,7 +141,7 @@
   
   .btn-restaurant:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-warm);
+    box-shadow: var(--shadow-ocean);
   }
   
   .btn-ghost {
@@ -162,7 +162,7 @@
   
   .card-elegant:hover {
     transform: translateY(-4px);
-    box-shadow: var(--shadow-warm);
+    box-shadow: var(--shadow-ocean);
   }
 
   /* Food card styles */
@@ -178,12 +178,12 @@
   }
 
   /* Gradient backgrounds */
-  .bg-gradient-warm {
-    background: var(--gradient-warm);
+  .bg-gradient-ocean {
+    background: var(--gradient-ocean);
   }
   
-  .bg-gradient-gold {
-    background: var(--gradient-gold);
+  .bg-gradient-metallic {
+    background: var(--gradient-metallic);
   }
   
   .bg-gradient-subtle {
@@ -208,7 +208,7 @@
 
 @layer utilities {
   .text-gradient {
-    background: var(--gradient-warm);
+    background: var(--gradient-ocean);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

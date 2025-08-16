@@ -20,33 +20,34 @@ interface PreferencesQuizProps {
 const questionsConfig = {
   general: [
     {
-      id: "dietary",
-      question: "¿Tienes alguna preferencia alimentaria?",
+      id: "meat-preference",
+      question: "¿Qué prefieres comer hoy?",
       options: [
-        { id: "none", label: "Ninguna", emoji: "🍽️" },
-        { id: "vegetarian", label: "Vegetariano", emoji: "🥗" },
-        { id: "vegan", label: "Vegano", emoji: "🌱" },
-        { id: "gluten-free", label: "Sin gluten", emoji: "🌾" }
+        { id: "carne-roja", label: "Carne Roja", emoji: "🥩" },
+        { id: "pollo", label: "Pollo", emoji: "🍗" },
+        { id: "pescado", label: "Pescado", emoji: "🐟" },
+        { id: "cualquiera", label: "Cualquiera", emoji: "🍽️" },
+        { id: "ninguna", label: "Ninguna", emoji: "🥗" }
       ]
     },
     {
-      id: "spice",
-      question: "¿Qué nivel de picante prefieres?",
+      id: "dietary-restriction",
+      question: "¿Tienes alguna restricción / preferencia especial?",
       options: [
-        { id: "mild", label: "Suave", emoji: "🥛" },
-        { id: "medium", label: "Medio", emoji: "🌶️" },
-        { id: "hot", label: "Picante", emoji: "🔥" },
-        { id: "extra-hot", label: "Muy picante", emoji: "🌋" }
+        { id: "vegetariano", label: "Vegetariano", emoji: "🥗" },
+        { id: "sin-gluten", label: "Sin gluten", emoji: "🌾" },
+        { id: "keto", label: "Keto (low carb)", emoji: "🥑" },
+        { id: "ninguna", label: "Ninguna", emoji: "🍽️" }
       ]
     },
     {
-      id: "cuisine",
-      question: "¿Qué tipo de cocina te gusta más?",
+      id: "drink-preference",
+      question: "¿Qué prefieres tomar?",
       options: [
-        { id: "traditional", label: "Tradicional", emoji: "🏠" },
-        { id: "international", label: "Internacional", emoji: "🌍" },
-        { id: "fusion", label: "Fusión", emoji: "✨" },
-        { id: "contemporary", label: "Contemporánea", emoji: "🎨" }
+        { id: "vino", label: "Vino", emoji: "🍷" },
+        { id: "cerveza", label: "Cerveza", emoji: "🍺" },
+        { id: "tragos", label: "Tragos", emoji: "🍹" },
+        { id: "sin-alcohol", label: "Sin alcohol", emoji: "🥤" }
       ]
     }
   ],
@@ -146,7 +147,7 @@ export function PreferencesQuiz({ onComplete, onSkip, onBack, restaurantType }: 
                   variant="outline"
                   className={`h-20 flex-col space-y-2 transition-all duration-200 ${
                     answers[question.id] === option.id 
-                      ? 'bg-gradient-warm text-white border-transparent' 
+                      ? 'bg-gradient-ocean text-white border-transparent' 
                       : 'hover:border-primary hover:bg-muted'
                   }`}
                   onClick={() => handleAnswer(question.id, option.id)}

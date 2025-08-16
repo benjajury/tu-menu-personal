@@ -217,6 +217,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_preferences: {
+        Row: {
+          created_at: string
+          dietary_restriction: string | null
+          drink_preference: string | null
+          id: string
+          meat_preference: string | null
+          session_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          dietary_restriction?: string | null
+          drink_preference?: string | null
+          id?: string
+          meat_preference?: string | null
+          session_id?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          dietary_restriction?: string | null
+          drink_preference?: string | null
+          id?: string
+          meat_preference?: string | null
+          session_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
