@@ -17,6 +17,7 @@ export type Database = {
       categories: {
         Row: {
           created_at: string | null
+          display_order: number | null
           icon: string | null
           id: string
           name: string
@@ -25,6 +26,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
+          display_order?: number | null
           icon?: string | null
           id?: string
           name: string
@@ -33,6 +35,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
+          display_order?: number | null
           icon?: string | null
           id?: string
           name?: string
@@ -68,6 +71,7 @@ export type Database = {
           restaurant_id: string | null
           sophistication_level: string | null
           spice_level: string | null
+          tipo_carne: string | null
           updated_at: string | null
           wine_pairing: string | null
         }
@@ -89,6 +93,7 @@ export type Database = {
           restaurant_id?: string | null
           sophistication_level?: string | null
           spice_level?: string | null
+          tipo_carne?: string | null
           updated_at?: string | null
           wine_pairing?: string | null
         }
@@ -110,6 +115,7 @@ export type Database = {
           restaurant_id?: string | null
           sophistication_level?: string | null
           spice_level?: string | null
+          tipo_carne?: string | null
           updated_at?: string | null
           wine_pairing?: string | null
         }
@@ -129,6 +135,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      menu_items_staging: {
+        Row: {
+          allergens: string | null
+          category_name: string | null
+          cooking_method: string | null
+          description: string | null
+          image_url: string | null
+          is_available: boolean | null
+          is_gluten_free: boolean | null
+          is_vegan: boolean | null
+          is_vegetarian: boolean | null
+          name: string | null
+          origin: string | null
+          price: number | null
+          restaurant_name: string | null
+          sophistication_level: string | null
+          spice_level: string | null
+          wine_pairing: string | null
+        }
+        Insert: {
+          allergens?: string | null
+          category_name?: string | null
+          cooking_method?: string | null
+          description?: string | null
+          image_url?: string | null
+          is_available?: boolean | null
+          is_gluten_free?: boolean | null
+          is_vegan?: boolean | null
+          is_vegetarian?: boolean | null
+          name?: string | null
+          origin?: string | null
+          price?: number | null
+          restaurant_name?: string | null
+          sophistication_level?: string | null
+          spice_level?: string | null
+          wine_pairing?: string | null
+        }
+        Update: {
+          allergens?: string | null
+          category_name?: string | null
+          cooking_method?: string | null
+          description?: string | null
+          image_url?: string | null
+          is_available?: boolean | null
+          is_gluten_free?: boolean | null
+          is_vegan?: boolean | null
+          is_vegetarian?: boolean | null
+          name?: string | null
+          origin?: string | null
+          price?: number | null
+          restaurant_name?: string | null
+          sophistication_level?: string | null
+          spice_level?: string | null
+          wine_pairing?: string | null
+        }
+        Relationships: []
       }
       restaurants: {
         Row: {

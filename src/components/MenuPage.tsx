@@ -48,7 +48,7 @@ export function MenuPage({ preferences, restaurantName }: MenuPageProps) {
     try {
       const [itemsRes, categoriesRes] = await Promise.all([
         supabase.from("menu_items").select("*").eq("is_available", true).order("name"),
-        supabase.from("categories").select("*").order("name"),
+        supabase.from("categories").select("*").order("display_order", { ascending: true }).order("name", { ascending: true }),
       ]);
 
       if (itemsRes.error) throw itemsRes.error;

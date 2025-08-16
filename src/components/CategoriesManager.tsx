@@ -15,6 +15,7 @@ interface Category {
   name: string;
   icon: string;
   restaurant_id: string;
+  display_order: number;
 }
 
 interface Restaurant {
@@ -32,6 +33,7 @@ export function CategoriesManager() {
   const [formData, setFormData] = useState({
     name: "",
     icon: "",
+    display_order: 999,
   });
 
   useEffect(() => {
@@ -44,7 +46,8 @@ export function CategoriesManager() {
       const { data, error } = await supabase
         .from("categories")
         .select("*")
-        .order("name");
+        .order("display_order", { ascending: true })
+        .order("name", { ascending: true });
 
       if (error) throw error;
       setCategories(data || []);
@@ -63,6 +66,7 @@ export function CategoriesManager() {
     setFormData({
       name: "",
       icon: "",
+      display_order: 999,
     });
     setEditingCategory(null);
   };
@@ -104,6 +108,7 @@ export function CategoriesManager() {
     setFormData({
       name: category.name,
       icon: category.icon || "",
+      display_order: category.display_order || 999,
     });
     setDialogOpen(true);
   };
@@ -173,6 +178,22 @@ export function CategoriesManager() {
                 />
               </div>
 
+              <div className="space-y-2">
+                <Label htmlFor="display_order">Orden de visualización</Label>
+                <Input
+                  id="display_order"
+                  type="number"
+                  placeholder="10 (menor número = aparece primero)"
+                  value={formData.display_order}
+                  onChange={(e) =>
+                    setFormData({ ...formData, display_order: parseInt(e.target.value) || 999 })
+                  }
+                />
+                <p className="text-xs text-muted-foreground">
+                  Números menores aparecen primero. Ej: 10=Aperitivos, 20=Platos principales, 30=Bar, 40=Postres
+                </p>
+              </div>
+
 
               <div className="flex justify-end space-x-2">
                 <Button
@@ -200,6 +221,7 @@ export function CategoriesManager() {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Orden</TableHead>
                 <TableHead>Nombre</TableHead>
                 <TableHead>Icono</TableHead>
                 <TableHead>Acciones</TableHead>
@@ -208,6 +230,7 @@ export function CategoriesManager() {
             <TableBody>
               {categories.map((category) => (
                 <TableRow key={category.id}>
+                  <TableCell className="text-sm text-muted-foreground">{category.display_order}</TableCell>
                   <TableCell className="font-medium">{category.name}</TableCell>
                   <TableCell>{category.icon}</TableCell>
                   <TableCell>
