@@ -49,6 +49,7 @@ export function MenuItemsManager() {
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
+  const [isDrink, setIsDrink] = useState(false);
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -61,12 +62,9 @@ export function MenuItemsManager() {
     is_vegetarian: false,
     is_vegan: false,
     is_gluten_free: false,
-    spice_level: "",
-    cooking_method: "",
-    wine_pairing: "",
-    origin: "",
-    sophistication_level: "clásico",
-    allergens: [] as string[],
+    is_keto: false,
+    tipo_carne: "",
+    drink_type: "",
   });
 
   useEffect(() => {
@@ -108,14 +106,12 @@ export function MenuItemsManager() {
       is_vegetarian: false,
       is_vegan: false,
       is_gluten_free: false,
-      spice_level: "",
-      cooking_method: "",
-      wine_pairing: "",
-      origin: "",
-      sophistication_level: "clásico",
-      allergens: [],
+      is_keto: false,
+      tipo_carne: "",
+      drink_type: "",
     });
     setEditingItem(null);
+    setIsDrink(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -155,8 +151,9 @@ export function MenuItemsManager() {
     }
   };
 
-  const handleEdit = (item: MenuItem) => {
+  const handleEdit = (item: any) => {
     setEditingItem(item);
+    setIsDrink(!!item.drink_type);
     setFormData({
       name: item.name,
       description: item.description || "",
@@ -167,12 +164,9 @@ export function MenuItemsManager() {
       is_vegetarian: item.is_vegetarian,
       is_vegan: item.is_vegan,
       is_gluten_free: item.is_gluten_free,
-      spice_level: item.spice_level || "",
-      cooking_method: item.cooking_method || "",
-      wine_pairing: item.wine_pairing || "",
-      origin: item.origin || "",
-      sophistication_level: item.sophistication_level || "clásico",
-      allergens: item.allergens || [],
+      is_keto: item.is_keto || false,
+      tipo_carne: item.tipo_carne || "",
+      drink_type: item.drink_type || "",
     });
     setDialogOpen(true);
   };
@@ -214,14 +208,35 @@ export function MenuItemsManager() {
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>
-                {editingItem ? "Editar Plato" : "Nuevo Plato"}
+                {editingItem ? `Editar ${isDrink ? "Trago" : "Plato"}` : `Nuevo ${isDrink ? "Trago" : "Plato"}`}
               </DialogTitle>
               <DialogDescription>
                 {editingItem
-                  ? "Modifica la información del plato"
-                  : "Añade un nuevo plato al menú"}
+                  ? `Modifica la información del ${isDrink ? "trago" : "plato"}`
+                  : `Añade un nuevo ${isDrink ? "trago" : "plato"} al menú`}
               </DialogDescription>
             </DialogHeader>
+            
+            {/* Toggle para elegir entre plato y trago */}
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="isDrink"
+                checked={isDrink}
+                onCheckedChange={(checked) => {
+                  setIsDrink(checked);
+                  // Reset relevant fields when switching
+                  setFormData({
+                    ...formData,
+                    tipo_carne: "",
+                    drink_type: "",
+                    is_vegetarian: false,
+                    is_vegan: false,
+                  });
+                }}
+              />
+              <Label htmlFor="isDrink">Es un trago</Label>
+            </div>
+            
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
@@ -294,81 +309,52 @@ export function MenuItemsManager() {
                 </Select>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              {/* Campos específicos para platos */}
+              {!isDrink && (
                 <div className="space-y-2">
-                  <Label htmlFor="spice_level">Nivel de Picante</Label>
+                  <Label htmlFor="tipo_carne">Tipo de Carne</Label>
                   <Select
-                    value={formData.spice_level}
+                    value={formData.tipo_carne}
                     onValueChange={(value) =>
-                      setFormData({ ...formData, spice_level: value })
+                      setFormData({ ...formData, tipo_carne: value })
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Selecciona nivel" />
+                      <SelectValue placeholder="Selecciona tipo de carne" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="suave">Suave</SelectItem>
-                      <SelectItem value="medio">Medio</SelectItem>
-                      <SelectItem value="fuerte">Fuerte</SelectItem>
+                      <SelectItem value="Roja">Carne Roja</SelectItem>
+                      <SelectItem value="Pollo">Pollo</SelectItem>
+                      <SelectItem value="Pescado">Pescado</SelectItem>
+                      <SelectItem value="Mariscos">Mariscos</SelectItem>
+                      <SelectItem value="Vegetariano">Vegetariano</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
+              )}
+
+              {/* Campos específicos para tragos */}
+              {isDrink && (
                 <div className="space-y-2">
-                  <Label htmlFor="sophistication_level">Nivel de Sofisticación</Label>
+                  <Label htmlFor="drink_type">Tipo de Bebida</Label>
                   <Select
-                    value={formData.sophistication_level}
+                    value={formData.drink_type}
                     onValueChange={(value) =>
-                      setFormData({ ...formData, sophistication_level: value })
+                      setFormData({ ...formData, drink_type: value })
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Selecciona nivel" />
+                      <SelectValue placeholder="Selecciona tipo de bebida" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="clásico">Clásico</SelectItem>
-                      <SelectItem value="premium">Premium</SelectItem>
-                      <SelectItem value="signature">Signature</SelectItem>
+                      <SelectItem value="Vino">Vino</SelectItem>
+                      <SelectItem value="Cerveza">Cerveza</SelectItem>
+                      <SelectItem value="Tragos">Tragos</SelectItem>
+                      <SelectItem value="Sin alcohol">Sin alcohol</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="cooking_method">Método de Cocción</Label>
-                  <Input
-                    id="cooking_method"
-                    value={formData.cooking_method}
-                    onChange={(e) =>
-                      setFormData({ ...formData, cooking_method: e.target.value })
-                    }
-                    placeholder="ej: Grillado, Frito, Al vapor"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="origin">Origen</Label>
-                  <Input
-                    id="origin"
-                    value={formData.origin}
-                    onChange={(e) =>
-                      setFormData({ ...formData, origin: e.target.value })
-                    }
-                    placeholder="ej: Costas chilenas"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="wine_pairing">Maridaje de Vino</Label>
-                <Input
-                  id="wine_pairing"
-                  value={formData.wine_pairing}
-                  onChange={(e) =>
-                    setFormData({ ...formData, wine_pairing: e.target.value })
-                  }
-                  placeholder="ej: Sauvignon Blanc Reserva"
-                />
-              </div>
+              )}
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center space-x-2">
@@ -381,40 +367,77 @@ export function MenuItemsManager() {
                   />
                   <Label htmlFor="is_available">Disponible</Label>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="is_vegetarian"
-                    checked={formData.is_vegetarian}
-                    onCheckedChange={(checked) =>
-                      setFormData({ ...formData, is_vegetarian: checked })
-                    }
-                  />
-                  <Label htmlFor="is_vegetarian">Vegetariano</Label>
-                </div>
+                
+                {/* Para tragos: Sin Alcohol */}
+                {isDrink && (
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="sin_alcohol"
+                      checked={formData.drink_type === "Sin alcohol"}
+                      onCheckedChange={(checked) =>
+                        setFormData({ 
+                          ...formData, 
+                          drink_type: checked ? "Sin alcohol" : "" 
+                        })
+                      }
+                    />
+                    <Label htmlFor="sin_alcohol">Sin Alcohol</Label>
+                  </div>
+                )}
+                
+                {/* Para platos: Vegetariano */}
+                {!isDrink && (
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="is_vegetarian"
+                      checked={formData.is_vegetarian}
+                      onCheckedChange={(checked) =>
+                        setFormData({ ...formData, is_vegetarian: checked })
+                      }
+                    />
+                    <Label htmlFor="is_vegetarian">Vegetariano</Label>
+                  </div>
+                )}
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="is_vegan"
-                    checked={formData.is_vegan}
-                    onCheckedChange={(checked) =>
-                      setFormData({ ...formData, is_vegan: checked })
-                    }
-                  />
-                  <Label htmlFor="is_vegan">Vegano</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="is_gluten_free"
-                    checked={formData.is_gluten_free}
-                    onCheckedChange={(checked) =>
-                      setFormData({ ...formData, is_gluten_free: checked })
-                    }
-                  />
-                  <Label htmlFor="is_gluten_free">Sin Gluten</Label>
-                </div>
-              </div>
+              {/* Opciones comunes para platos */}
+              {!isDrink && (
+                <>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="is_vegan"
+                        checked={formData.is_vegan}
+                        onCheckedChange={(checked) =>
+                          setFormData({ ...formData, is_vegan: checked })
+                        }
+                      />
+                      <Label htmlFor="is_vegan">Vegano</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="is_gluten_free"
+                        checked={formData.is_gluten_free}
+                        onCheckedChange={(checked) =>
+                          setFormData({ ...formData, is_gluten_free: checked })
+                        }
+                      />
+                      <Label htmlFor="is_gluten_free">Sin Gluten</Label>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="is_keto"
+                      checked={formData.is_keto}
+                      onCheckedChange={(checked) =>
+                        setFormData({ ...formData, is_keto: checked })
+                      }
+                    />
+                    <Label htmlFor="is_keto">Keto (Low Carb)</Label>
+                  </div>
+                </>
+              )}
 
               <div className="flex justify-end space-x-2">
                 <Button

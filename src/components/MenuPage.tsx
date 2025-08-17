@@ -18,6 +18,9 @@ interface MenuItem {
   is_vegetarian: boolean;
   is_vegan: boolean;
   is_gluten_free: boolean;
+  is_keto?: boolean;
+  tipo_carne?: string;
+  drink_type?: string;
 }
 
 interface Category {
@@ -80,21 +83,42 @@ export function MenuPage({ preferences, restaurantName }: MenuPageProps) {
   };
 
   const getRecommendations = () => {
-    // For now, return first few items. Could be enhanced with real recommendation logic
-    let recommended = menuItems.slice(0, 3);
+    let recommended = [...menuItems];
     
-    // Filter by dietary preferences
-    if (preferences.dietary && preferences.dietary !== "none") {
-      if (preferences.dietary === "vegetarian") {
-        recommended = recommended.filter(item => item.is_vegetarian);
-      } else if (preferences.dietary === "vegan") {
-        recommended = recommended.filter(item => item.is_vegan);
-      } else if (preferences.dietary === "gluten-free") {
-        recommended = recommended.filter(item => item.is_gluten_free);
+    // Filter by meat preference
+    if (preferences.meatPreference && preferences.meatPreference !== "Cualquiera") {
+      if (preferences.meatPreference === "Ninguna") {
+        recommended = recommended.filter(item => 
+          item.is_vegetarian || item.is_vegan || item.tipo_carne === "Vegetariano"
+        );
+      } else {
+        recommended = recommended.filter(item => 
+          item.tipo_carne === preferences.meatPreference
+        );
       }
     }
     
-    return recommended;
+    // Filter by dietary restrictions
+    if (preferences.dietaryRestriction && preferences.dietaryRestriction !== "Ninguna") {
+      if (preferences.dietaryRestriction === "Vegetariano") {
+        recommended = recommended.filter(item => item.is_vegetarian);
+      } else if (preferences.dietaryRestriction === "Sin gluten") {
+        recommended = recommended.filter(item => item.is_gluten_free);
+      } else if (preferences.dietaryRestriction === "Keto (low carb)") {
+        recommended = recommended.filter(item => item.is_keto);
+      }
+    }
+    
+    // Filter by drink preference
+    if (preferences.drinkPreference && preferences.drinkPreference !== "Sin alcohol") {
+      const drinkItems = recommended.filter(item => 
+        item.drink_type === preferences.drinkPreference
+      );
+      recommended = [...recommended.filter(item => !item.drink_type), ...drinkItems];
+    }
+    
+    // Return top 6 recommendations, or all if fewer than 6
+    return recommended.slice(0, 6);
   };
 
   const getItemsByCategory = (categoryId: string) => {
