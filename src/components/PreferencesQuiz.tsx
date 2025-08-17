@@ -23,31 +23,31 @@ const questionsConfig = {
       id: "meat-preference",
       question: "¿Qué prefieres comer hoy?",
       options: [
-        { id: "carne-roja", label: "Carne Roja", emoji: "🥩" },
-        { id: "pollo", label: "Pollo", emoji: "🍗" },
-        { id: "pescado", label: "Pescado", emoji: "🐟" },
-        { id: "cualquiera", label: "Cualquiera", emoji: "🍽️" },
-        { id: "ninguna", label: "Ninguna", emoji: "🥗" }
+        { id: "Roja", label: "Carne Roja", emoji: "🥩" },
+        { id: "Pollo", label: "Pollo", emoji: "🍗" },
+        { id: "Pescado", label: "Pescado", emoji: "🐟" },
+        { id: "Cualquiera", label: "Cualquiera", emoji: "🍽️" },
+        { id: "Ninguna", label: "Ninguna", emoji: "🥗" }
       ]
     },
     {
       id: "dietary-restriction",
       question: "¿Tienes alguna restricción / preferencia especial?",
       options: [
-        { id: "vegetariano", label: "Vegetariano", emoji: "🥗" },
-        { id: "sin-gluten", label: "Sin gluten", emoji: "🌾" },
-        { id: "keto", label: "Keto (low carb)", emoji: "🥑" },
-        { id: "ninguna", label: "Ninguna", emoji: "🍽️" }
+        { id: "Vegetariano", label: "Vegetariano", emoji: "🥗" },
+        { id: "Sin gluten", label: "Sin gluten", emoji: "🌾" },
+        { id: "Keto (low carb)", label: "Keto (low carb)", emoji: "🥑" },
+        { id: "Ninguna", label: "Ninguna", emoji: "🍽️" }
       ]
     },
     {
       id: "drink-preference",
       question: "¿Qué prefieres tomar?",
       options: [
-        { id: "vino", label: "Vino", emoji: "🍷" },
-        { id: "cerveza", label: "Cerveza", emoji: "🍺" },
-        { id: "tragos", label: "Tragos", emoji: "🍹" },
-        { id: "sin-alcohol", label: "Sin alcohol", emoji: "🥤" }
+        { id: "Vino", label: "Vino", emoji: "🍷" },
+        { id: "Cerveza", label: "Cerveza", emoji: "🍺" },
+        { id: "Tragos", label: "Tragos", emoji: "🍹" },
+        { id: "Sin alcohol", label: "Sin alcohol", emoji: "🥤" }
       ]
     }
   ],

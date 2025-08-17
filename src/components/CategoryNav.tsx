@@ -29,8 +29,8 @@ export function CategoryNav({ categories, activeCategory, onCategoryChange }: Ca
               onClick={() => onCategoryChange(category.id)}
               className={`flex-shrink-0 transition-all duration-200 ${
                 isActive 
-                  ? 'bg-gradient-warm text-white border-transparent shadow-warm' 
-                  : 'btn-ghost border-border hover:border-primary'
+                  ? 'bg-gradient-ocean text-white border-transparent shadow-elegant' 
+                  : 'btn-ghost border-border hover:border-primary hover:bg-muted'
               }`}
             >
               <Icon className="h-4 w-4 mr-2" />
