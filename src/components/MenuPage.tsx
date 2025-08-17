@@ -88,56 +88,86 @@ export function MenuPage({ preferences, restaurantName }: MenuPageProps) {
     console.log('🎯 Getting recommendations with preferences:', preferences);
     console.log('📋 Available menu items:', menuItems.length);
     
-    let recommended = [...menuItems];
-    console.log('🔍 Starting with all items:', recommended.length);
+    // Group items by category
+    const itemsByCategory = categories.reduce((acc, category) => {
+      if (category.id === "recomendaciones") return acc;
+      
+      let categoryItems = menuItems.filter(item => item.category_id === category.id);
+      
+      // Apply preference filters
+      if (preferences.meatPreference && preferences.meatPreference !== "Cualquiera") {
+        if (preferences.meatPreference === "vegetariano") {
+          categoryItems = categoryItems.filter(item => 
+            item.is_vegetarian || item.is_vegan || item.tipo_carne === "vegetariano"
+          );
+        } else {
+          categoryItems = categoryItems.filter(item => 
+            item.tipo_carne === preferences.meatPreference
+          );
+        }
+      }
+      
+      // Apply dietary restrictions
+      if (preferences.dietaryRestriction && preferences.dietaryRestriction !== "Ninguna") {
+        if (preferences.dietaryRestriction === "Vegetariano") {
+          categoryItems = categoryItems.filter(item => item.is_vegetarian);
+        } else if (preferences.dietaryRestriction === "Sin gluten") {
+          categoryItems = categoryItems.filter(item => item.is_gluten_free);
+        } else if (preferences.dietaryRestriction === "Keto (low carb)") {
+          categoryItems = categoryItems.filter(item => item.is_keto);
+        }
+      }
+      
+      // For drinks category, filter by drink preference
+      if (category.name.toLowerCase().includes('bebida') || category.name.toLowerCase().includes('vino') || category.name.toLowerCase().includes('cerveza')) {
+        if (preferences.drinkPreference && preferences.drinkPreference !== "Sin alcohol") {
+          categoryItems = categoryItems.filter(item => 
+            item.drink_type === preferences.drinkPreference || !item.drink_type
+          );
+        }
+      }
+      
+      if (categoryItems.length > 0) {
+        acc[category.id] = categoryItems;
+      }
+      return acc;
+    }, {} as Record<string, MenuItem[]>);
     
-    // Filter by meat preference
-    if (preferences.meatPreference && preferences.meatPreference !== "Cualquiera") {
-      console.log('🥩 Filtering by meat preference:', preferences.meatPreference);
-      if (preferences.meatPreference === "Ninguna") {
-        recommended = recommended.filter(item => 
-          item.is_vegetarian || item.is_vegan || item.tipo_carne === "Vegetariano"
-        );
+    console.log('📊 Items by category:', itemsByCategory);
+    
+    // Select 3 items from each category with different price ranges
+    const recommendations: MenuItem[] = [];
+    
+    Object.entries(itemsByCategory).forEach(([categoryId, items]) => {
+      if (items.length === 0) return;
+      
+      // Sort by price
+      const sortedItems = [...items].sort((a, b) => a.price - b.price);
+      const categoryRecs: MenuItem[] = [];
+      
+      if (sortedItems.length >= 3) {
+        // Pick low, medium, high price items
+        categoryRecs.push(sortedItems[0]); // Cheapest
+        categoryRecs.push(sortedItems[Math.floor(sortedItems.length / 2)]); // Medium
+        categoryRecs.push(sortedItems[sortedItems.length - 1]); // Most expensive
       } else {
-        recommended = recommended.filter(item => 
-          item.tipo_carne === preferences.meatPreference
-        );
+        // If less than 3 items, take what we have
+        categoryRecs.push(...sortedItems);
       }
-      console.log('🥩 After meat filter:', recommended.length, 'items');
-    }
+      
+      recommendations.push(...categoryRecs);
+    });
     
-    // Filter by dietary restrictions
-    if (preferences.dietaryRestriction && preferences.dietaryRestriction !== "Ninguna") {
-      console.log('🌿 Filtering by dietary restriction:', preferences.dietaryRestriction);
-      if (preferences.dietaryRestriction === "Vegetariano") {
-        recommended = recommended.filter(item => item.is_vegetarian);
-      } else if (preferences.dietaryRestriction === "Sin gluten") {
-        recommended = recommended.filter(item => item.is_gluten_free);
-      } else if (preferences.dietaryRestriction === "Keto (low carb)") {
-        recommended = recommended.filter(item => item.is_keto);
-      }
-      console.log('🌿 After dietary filter:', recommended.length, 'items');
-    }
+    // Shuffle and limit to 9 total recommendations
+    const shuffled = recommendations.sort(() => Math.random() - 0.5);
+    const final = shuffled.slice(0, 9);
     
-    // Filter by drink preference
-    if (preferences.drinkPreference && preferences.drinkPreference !== "Sin alcohol") {
-      console.log('🍷 Filtering by drink preference:', preferences.drinkPreference);
-      const drinkItems = recommended.filter(item => 
-        item.drink_type === preferences.drinkPreference
-      );
-      recommended = [...recommended.filter(item => !item.drink_type), ...drinkItems];
-      console.log('🍷 After drink filter:', recommended.length, 'items');
-    }
-    
-    // Return top 6 recommendations, or all if fewer than 6
-    const final = recommended.slice(0, 6);
     console.log('⭐ Final recommendations:', final.length, 'items');
     console.log('⭐ Final recommended items:', final.map(item => ({
       name: item.name,
-      tipo_carne: item.tipo_carne,
-      is_vegetarian: item.is_vegetarian,
-      is_keto: item.is_keto,
-      drink_type: item.drink_type
+      category_id: item.category_id,
+      price: item.price,
+      tipo_carne: item.tipo_carne
     })));
     
     return final;
