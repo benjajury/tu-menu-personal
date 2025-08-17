@@ -23,11 +23,12 @@ const questionsConfig = {
       id: "meat-preference",
       question: "¿Qué prefieres comer hoy?",
       options: [
-        { id: "Roja", label: "Carne Roja", emoji: "🥩" },
-        { id: "Pollo", label: "Pollo", emoji: "🍗" },
-        { id: "Pescado", label: "Pescado", emoji: "🐟" },
+        { id: "roja", label: "Carne Roja", emoji: "🥩" },
+        { id: "pollo", label: "Pollo", emoji: "🍗" },
+        { id: "pescado", label: "Pescado", emoji: "🐟" },
+        { id: "mariscos", label: "Mariscos", emoji: "🦐" },
         { id: "Cualquiera", label: "Cualquiera", emoji: "🍽️" },
-        { id: "Ninguna", label: "Ninguna", emoji: "🥗" }
+        { id: "vegetariano", label: "Ninguna", emoji: "🥗" }
       ]
     },
     {
