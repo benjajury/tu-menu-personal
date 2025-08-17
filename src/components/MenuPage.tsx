@@ -88,89 +88,105 @@ export function MenuPage({ preferences, restaurantName }: MenuPageProps) {
     console.log('🎯 Getting recommendations with preferences:', preferences);
     console.log('📋 Available menu items:', menuItems.length);
     
-    // Group items by category
-    const itemsByCategory = categories.reduce((acc, category) => {
-      if (category.id === "recomendaciones") return acc;
-      
-      let categoryItems = menuItems.filter(item => item.category_id === category.id);
-      
-      // Apply preference filters
-      if (preferences.meatPreference && preferences.meatPreference !== "Cualquiera") {
-        if (preferences.meatPreference === "vegetariano") {
-          categoryItems = categoryItems.filter(item => 
-            item.is_vegetarian || item.is_vegan || item.tipo_carne === "vegetariano"
-          );
-        } else {
-          categoryItems = categoryItems.filter(item => 
-            item.tipo_carne === preferences.meatPreference
-          );
-        }
-      }
-      
-      // Apply dietary restrictions
-      if (preferences.dietaryRestriction && preferences.dietaryRestriction !== "Ninguna") {
-        if (preferences.dietaryRestriction === "Vegetariano") {
-          categoryItems = categoryItems.filter(item => item.is_vegetarian);
-        } else if (preferences.dietaryRestriction === "Sin gluten") {
-          categoryItems = categoryItems.filter(item => item.is_gluten_free);
-        } else if (preferences.dietaryRestriction === "Keto (low carb)") {
-          categoryItems = categoryItems.filter(item => item.is_keto);
-        }
-      }
-      
-      // For drinks category, filter by drink preference
-      if (category.name.toLowerCase().includes('bebida') || category.name.toLowerCase().includes('vino') || category.name.toLowerCase().includes('cerveza')) {
-        if (preferences.drinkPreference && preferences.drinkPreference !== "Sin alcohol") {
-          categoryItems = categoryItems.filter(item => 
-            item.drink_type === preferences.drinkPreference || !item.drink_type
-          );
-        }
-      }
-      
-      if (categoryItems.length > 0) {
-        acc[category.id] = categoryItems;
-      }
-      return acc;
-    }, {} as Record<string, MenuItem[]>);
+    // Start with all available items
+    let filteredItems = [...menuItems];
     
-    console.log('📊 Items by category:', itemsByCategory);
-    
-    // Select 3 items from each category with different price ranges
-    const recommendations: MenuItem[] = [];
-    
-    Object.entries(itemsByCategory).forEach(([categoryId, items]) => {
-      if (items.length === 0) return;
-      
-      // Sort by price
-      const sortedItems = [...items].sort((a, b) => a.price - b.price);
-      const categoryRecs: MenuItem[] = [];
-      
-      if (sortedItems.length >= 3) {
-        // Pick low, medium, high price items
-        categoryRecs.push(sortedItems[0]); // Cheapest
-        categoryRecs.push(sortedItems[Math.floor(sortedItems.length / 2)]); // Medium
-        categoryRecs.push(sortedItems[sortedItems.length - 1]); // Most expensive
+    // Apply meat preference filter
+    if (preferences.meatPreference && preferences.meatPreference !== "Cualquiera") {
+      console.log('🥩 Filtering by meat preference:', preferences.meatPreference);
+      if (preferences.meatPreference === "vegetariano") {
+        filteredItems = filteredItems.filter(item => 
+          item.is_vegetarian || item.is_vegan || item.tipo_carne === "vegetariano"
+        );
       } else {
-        // If less than 3 items, take what we have
-        categoryRecs.push(...sortedItems);
+        filteredItems = filteredItems.filter(item => 
+          item.tipo_carne === preferences.meatPreference || !item.tipo_carne
+        );
       }
-      
-      recommendations.push(...categoryRecs);
+    }
+    
+    // Apply dietary restriction filter
+    if (preferences.dietaryRestriction && preferences.dietaryRestriction !== "Ninguna") {
+      console.log('🌿 Filtering by dietary restriction:', preferences.dietaryRestriction);
+      if (preferences.dietaryRestriction === "Vegetariano") {
+        filteredItems = filteredItems.filter(item => item.is_vegetarian);
+      } else if (preferences.dietaryRestriction === "Sin gluten") {
+        filteredItems = filteredItems.filter(item => item.is_gluten_free);
+      } else if (preferences.dietaryRestriction === "Keto (low carb)") {
+        filteredItems = filteredItems.filter(item => item.is_keto);
+      }
+    }
+    
+    // Apply drink preference filter
+    if (preferences.drinkPreference && preferences.drinkPreference !== "Sin alcohol") {
+      console.log('🍷 Filtering by drink preference:', preferences.drinkPreference);
+      filteredItems = filteredItems.filter(item => 
+        item.drink_type === preferences.drinkPreference || !item.drink_type
+      );
+    }
+    
+    console.log('🔍 Filtered items:', filteredItems.length);
+    
+    if (filteredItems.length === 0) {
+      console.log('❌ No items match preferences');
+      return [];
+    }
+    
+    // Sort by price to create price ranges
+    const sortedByPrice = [...filteredItems].sort((a, b) => a.price - b.price);
+    
+    // Divide into 3 price ranges
+    const totalItems = sortedByPrice.length;
+    const lowPriceItems = sortedByPrice.slice(0, Math.ceil(totalItems / 3));
+    const midPriceItems = sortedByPrice.slice(Math.ceil(totalItems / 3), Math.ceil(2 * totalItems / 3));
+    const highPriceItems = sortedByPrice.slice(Math.ceil(2 * totalItems / 3));
+    
+    console.log('💰 Price ranges:', {
+      low: lowPriceItems.length,
+      mid: midPriceItems.length, 
+      high: highPriceItems.length
     });
     
-    // Shuffle and limit to 9 total recommendations
-    const shuffled = recommendations.sort(() => Math.random() - 0.5);
-    const final = shuffled.slice(0, 9);
+    const recommendations = [];
     
-    console.log('⭐ Final recommendations:', final.length, 'items');
-    console.log('⭐ Final recommended items:', final.map(item => ({
+    // Pick 1 random item from each price range
+    if (lowPriceItems.length > 0) {
+      const randomLow = lowPriceItems[Math.floor(Math.random() * lowPriceItems.length)];
+      recommendations.push(randomLow);
+    }
+    
+    if (midPriceItems.length > 0) {
+      const randomMid = midPriceItems[Math.floor(Math.random() * midPriceItems.length)];
+      recommendations.push(randomMid);
+    }
+    
+    if (highPriceItems.length > 0) {
+      const randomHigh = highPriceItems[Math.floor(Math.random() * highPriceItems.length)];
+      recommendations.push(randomHigh);
+    }
+    
+    // If we have less than 3, add more random items
+    while (recommendations.length < 6 && filteredItems.length > recommendations.length) {
+      const remainingItems = filteredItems.filter(item => 
+        !recommendations.some(rec => rec.id === item.id)
+      );
+      if (remainingItems.length > 0) {
+        const randomItem = remainingItems[Math.floor(Math.random() * remainingItems.length)];
+        recommendations.push(randomItem);
+      } else {
+        break;
+      }
+    }
+    
+    console.log('⭐ Final recommendations:', recommendations.length, 'items');
+    console.log('⭐ Final recommended items:', recommendations.map(item => ({
       name: item.name,
-      category_id: item.category_id,
       price: item.price,
-      tipo_carne: item.tipo_carne
+      tipo_carne: item.tipo_carne,
+      drink_type: item.drink_type
     })));
     
-    return final;
+    return recommendations;
   };
 
   const getItemsByCategory = (categoryId: string) => {
