@@ -14,6 +14,7 @@ export function usePreferences() {
 
   const savePreferences = async (prefs: Record<string, string>) => {
     setLoading(true);
+    console.log('🔍 Saving preferences:', prefs);
     try {
       const { error } = await supabase
         .from('user_preferences')
@@ -26,11 +27,14 @@ export function usePreferences() {
 
       if (error) throw error;
 
-      setPreferences({
+      const savedPrefs = {
         meatPreference: prefs['meat-preference'],
         dietaryRestriction: prefs['dietary-restriction'],
         drinkPreference: prefs['drink-preference']
-      });
+      };
+      
+      console.log('✅ Preferences saved successfully:', savedPrefs);
+      setPreferences(savedPrefs);
     } catch (error) {
       console.error('Error saving preferences:', error);
     } finally {

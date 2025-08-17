@@ -17,7 +17,9 @@ const Index = () => {
   };
 
   const handlePreferencesComplete = async (prefs: Record<string, string>) => {
+    console.log('🎮 Index: Quiz completed with preferences:', prefs);
     await savePreferences(prefs);
+    console.log('🎮 Index: Preferences saved, navigating to menu');
     setCurrentState("menu");
   };
 
