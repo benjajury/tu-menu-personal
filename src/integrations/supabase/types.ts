@@ -54,15 +54,16 @@ export type Database = {
       }
       menu_items: {
         Row: {
-          allergens: string[] | null
           category_id: string | null
           cooking_method: string | null
           created_at: string | null
           description: string | null
+          drink_type: string | null
           id: string
           image_url: string | null
           is_available: boolean | null
           is_gluten_free: boolean | null
+          is_keto: boolean | null
           is_vegan: boolean | null
           is_vegetarian: boolean | null
           name: string
@@ -70,21 +71,21 @@ export type Database = {
           price: number
           restaurant_id: string | null
           sophistication_level: string | null
-          spice_level: string | null
           tipo_carne: string | null
           updated_at: string | null
           wine_pairing: string | null
         }
         Insert: {
-          allergens?: string[] | null
           category_id?: string | null
           cooking_method?: string | null
           created_at?: string | null
           description?: string | null
+          drink_type?: string | null
           id?: string
           image_url?: string | null
           is_available?: boolean | null
           is_gluten_free?: boolean | null
+          is_keto?: boolean | null
           is_vegan?: boolean | null
           is_vegetarian?: boolean | null
           name: string
@@ -92,21 +93,21 @@ export type Database = {
           price: number
           restaurant_id?: string | null
           sophistication_level?: string | null
-          spice_level?: string | null
           tipo_carne?: string | null
           updated_at?: string | null
           wine_pairing?: string | null
         }
         Update: {
-          allergens?: string[] | null
           category_id?: string | null
           cooking_method?: string | null
           created_at?: string | null
           description?: string | null
+          drink_type?: string | null
           id?: string
           image_url?: string | null
           is_available?: boolean | null
           is_gluten_free?: boolean | null
+          is_keto?: boolean | null
           is_vegan?: boolean | null
           is_vegetarian?: boolean | null
           name?: string
@@ -114,7 +115,6 @@ export type Database = {
           price?: number
           restaurant_id?: string | null
           sophistication_level?: string | null
-          spice_level?: string | null
           tipo_carne?: string | null
           updated_at?: string | null
           wine_pairing?: string | null
@@ -138,13 +138,14 @@ export type Database = {
       }
       menu_items_staging: {
         Row: {
-          allergens: string | null
           category_name: string | null
           cooking_method: string | null
           description: string | null
+          drink_type: string | null
           image_url: string | null
           is_available: boolean | null
           is_gluten_free: boolean | null
+          is_keto: boolean | null
           is_vegan: boolean | null
           is_vegetarian: boolean | null
           name: string | null
@@ -153,16 +154,18 @@ export type Database = {
           restaurant_name: string | null
           sophistication_level: string | null
           spice_level: string | null
+          tipo_carne: string | null
           wine_pairing: string | null
         }
         Insert: {
-          allergens?: string | null
           category_name?: string | null
           cooking_method?: string | null
           description?: string | null
+          drink_type?: string | null
           image_url?: string | null
           is_available?: boolean | null
           is_gluten_free?: boolean | null
+          is_keto?: boolean | null
           is_vegan?: boolean | null
           is_vegetarian?: boolean | null
           name?: string | null
@@ -171,16 +174,18 @@ export type Database = {
           restaurant_name?: string | null
           sophistication_level?: string | null
           spice_level?: string | null
+          tipo_carne?: string | null
           wine_pairing?: string | null
         }
         Update: {
-          allergens?: string | null
           category_name?: string | null
           cooking_method?: string | null
           description?: string | null
+          drink_type?: string | null
           image_url?: string | null
           is_available?: boolean | null
           is_gluten_free?: boolean | null
+          is_keto?: boolean | null
           is_vegan?: boolean | null
           is_vegetarian?: boolean | null
           name?: string | null
@@ -189,6 +194,7 @@ export type Database = {
           restaurant_name?: string | null
           sophistication_level?: string | null
           spice_level?: string | null
+          tipo_carne?: string | null
           wine_pairing?: string | null
         }
         Relationships: []
@@ -252,7 +258,43 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      recommend_menu_items: {
+        Args: {
+          budget_max_param?: number
+          budget_min_param?: number
+          drink_type_param?: string[]
+          is_keto_param?: boolean
+          limit_param?: number
+          only_drinks_param?: boolean
+          restaurant_id_param: string
+          sophistication_param?: string[]
+          tipo_carne_param?: string[]
+        }
+        Returns: {
+          category_name: string
+          description: string
+          drink_type: string
+          image_url: string
+          is_gluten_free: boolean
+          is_keto: boolean
+          is_vegan: boolean
+          is_vegetarian: boolean
+          menu_item_id: string
+          name: string
+          price: number
+          score: number
+          sophistication_level: string
+          tipo_carne: string
+        }[]
+      }
+      unaccent: {
+        Args: { "": string }
+        Returns: string
+      }
+      unaccent_init: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
     }
     Enums: {
       [_ in never]: never
